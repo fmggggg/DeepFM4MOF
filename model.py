@@ -1,6 +1,6 @@
 '''
-# Time   : 2020/10/22 11:15
-# Author : junchaoli
+# Time   : 2023/08/02
+# Author : Minggao Feng
 # File   : model.py
 '''
 from layer import FM_layer, Dense_layer

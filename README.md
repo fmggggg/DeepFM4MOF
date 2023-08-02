@@ -25,4 +25,4 @@ python train.py --coldstart=true --property=1 --targetfrac=0.9
 ```
 (--property (int, default=1) is the predicted property, range of it is 1 to 28, --targetfrac (float, default=0.9) is the fraction of the test set of the target property, say it's 0.9, then 90% of the target property is separated from the dataset, it will be uesd to test the trained model,range of it is 0 to 1)
 
-###### If you used this code in your paper, please cite [DeepFM4MOF](https://www.sciencedirect.com/science/article/abs/pii/S1383586622016665).Thank you.
+### If you used this code in your paper, please cite [DeepFM4MOF](https://www.sciencedirect.com/science/article/abs/pii/S1383586622016665).Thank you.

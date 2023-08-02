@@ -1,6 +1,6 @@
 '''
-# Time   : 2020/10/22 10:42
-# Author : junchaoli
+# Time   : 2023/08/02
+# Author : Minggao Feng
 # File   : model.py
 '''
 
