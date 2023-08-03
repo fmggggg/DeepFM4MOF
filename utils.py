@@ -1,7 +1,6 @@
 '''
 # Time   : 2023/08/02
 # Author : Minggao Feng
-# File   : utils.py
 '''
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler

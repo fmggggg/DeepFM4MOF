@@ -1,7 +1,6 @@
 '''
 # Time   : 2023/08/02
 # Author : Minggao Feng
-# File   : train_lstm.py
 '''
 from model import DeepFM
 from utils import create_hmof_dataset
@@ -79,40 +78,40 @@ if __name__ == '__main__':
     #save the model
     tf.saved_model.save(model, "traind_models/traind_model")
 
-    #fig
-    print("-----------------------------generating figure----------------------------")
-    X_test=tf.constant(X_test, dtype = tf.float32)
-    pre_test=model.call(X_test)
-    df_pre_test=pd.DataFrame(np.array(pre_test),columns=['pre'])
-    df_y_test=pd.DataFrame(np.array(y_test),columns=['test'])
-    test_total=df_pre_test.join(df_y_test)
-    x=np.array(df_pre_test)
-    y=np.array(df_y_test)
-    x=x.reshape(1,-1)
-    y=y.reshape(1,-1)
-    xy = np.vstack([x,y])
-    z = gaussian_kde(xy)(xy)
-    #plot
-    plt.rc('font',family='Times New Roman') 
-    fig, ax = plt.subplots()
-    plt.scatter(y, x,c=z,  s=0.5,cmap='rainbow')
-    plt.colorbar(label='Point Density')
-    plt.title("imputation_test")
-    plt.xlabel('test') 
-    plt.ylabel('pred')  
-    plt.xlim(0,1)
-    plt.ylim(0,1)
-    xpoints = np.array([0, 1])
-    ypoints = np.array([0, 1])
-    plt.plot(xpoints, ypoints,linewidth=1,linestyle="--",c="black")
-    plt.savefig("log/imputation_test.png", format="png")
-    plt.show()
+    if not ifcoldstart:
+        #fig
+        print("-----------------------------generating figure----------------------------")
+        X_test=tf.constant(X_test, dtype = tf.float32)
+        pre_test=model.call(X_test)
+        df_pre_test=pd.DataFrame(np.array(pre_test),columns=['pre'])
+        df_y_test=pd.DataFrame(np.array(y_test),columns=['test'])
+        test_total=df_pre_test.join(df_y_test)
+        x=np.array(df_pre_test)
+        y=np.array(df_y_test)
+        x=x.reshape(1,-1)
+        y=y.reshape(1,-1)
+        xy = np.vstack([x,y])
+        z = gaussian_kde(xy)(xy)
+        #plot
+        plt.rc('font',family='Times New Roman') 
+        fig, ax = plt.subplots()
+        plt.scatter(y, x,c=z,  s=0.5,cmap='rainbow')
+        plt.colorbar(label='Point Density')
+        plt.title("imputation_test")
+        plt.xlabel('test') 
+        plt.ylabel('pred')  
+        plt.xlim(0,1)
+        plt.ylim(0,1)
+        xpoints = np.array([0, 1])
+        ypoints = np.array([0, 1])
+        plt.plot(xpoints, ypoints,linewidth=1,linestyle="--",c="black")
+        plt.savefig("log/imputation_test.png", format="png")
+        plt.show()
 
 
     #cold-start test
     if ifcoldstart:
-        print('-------------------------------------------------------------')
-        print("Cold-start test:")
+        print('-----------------------------Cold-start test--------------------------------')
         test_test_X = test_test_target.drop(['label'], axis=1).values
         test_test_y = test_test_target['label']
         test_test_X=tf.convert_to_tensor(test_test_X, tf.float32, name='inputs')
@@ -129,7 +128,7 @@ if __name__ == '__main__':
 
         #generate the fig
         # Calculate the point density
-        print("-----------------------------generating figure----------------------------")
+        print("-------------------------------generating figure-----------------------------")
         x=np.array(df_pre_test)
         y=np.array(df_y_test)
         x=x.reshape(1,-1)

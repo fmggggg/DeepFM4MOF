@@ -1,7 +1,6 @@
 '''
 # Time   : 2023/08/02
 # Author : Minggao Feng
-# File   : model.py
 '''
 
 import tensorflow as tf
