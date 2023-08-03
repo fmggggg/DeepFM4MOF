@@ -24,7 +24,9 @@ if __name__ == '__main__':
     propertyID=args.property
     target_frac=args.targetfrac
     print('ifcoldstart=',ifcoldstart)
-    print('propertyID=',propertyID)
+    if ifcoldstart:
+        print('propertyID=',propertyID)
+        print('targetfrac=',target_frac)
     file_path = 'dataset/28ads-8206hMOFs.csv'
     feature_columns, (X_train, y_train), (X_test, y_test),test_test_target = create_hmof_dataset(file_path,ifcoldstart,propertyID,target_frac, embed_dim=8,test_size=0.2)
 
@@ -43,8 +45,6 @@ if __name__ == '__main__':
 
     # train
     results = []
-    r2_results=[]
-    mae_results=[]
     y_train=tf.constant(y_train, dtype = tf.float32, shape=[len(y_train),1])
     y_test=tf.constant(y_test, dtype = tf.float32, shape=[len(y_test),1])
     for i in range(1000):
@@ -70,20 +70,43 @@ if __name__ == '__main__':
 
         grad = tape.gradient(loss, model.variables)
         optimizer.apply_gradients(grads_and_vars=zip(grad, model.variables))
-        results.append([i, test_loss.numpy()])
-        r2_results.append([i, test_r2.numpy()])
-        mae_results.append([i, test_mae.numpy()])
+        results.append([i, test_loss.numpy(),test_r2.numpy(),test_mae.numpy()])
 
     #save the results
-    pd.DataFrame(results, columns=['Iteration', 'test_mse'])\
-        .to_csv('log/mse_DeepFM_log.csv', index=False)
-    pd.DataFrame(r2_results, columns=['Iteration', 'test_r2'])\
-        .to_csv('log/r2_DeepFM_log.csv', index=False)
-    pd.DataFrame(mae_results, columns=['Iteration', 'test_mae'])\
-        .to_csv('log/mae_DeepFM_log.csv', index=False)
+    pd.DataFrame(results, columns=['Iteration', 'test_mse', 'test_r2', 'test_mae'])\
+        .to_csv('log/DeepFM_log.csv', index=False)
     
     #save the model
     tf.saved_model.save(model, "traind_models/traind_model")
+
+    #fig
+    print("-----------------------------generating figure----------------------------")
+    X_test=tf.constant(X_test, dtype = tf.float32)
+    pre_test=model.call(X_test)
+    df_pre_test=pd.DataFrame(np.array(pre_test),columns=['pre'])
+    df_y_test=pd.DataFrame(np.array(y_test),columns=['test'])
+    test_total=df_pre_test.join(df_y_test)
+    x=np.array(df_pre_test)
+    y=np.array(df_y_test)
+    x=x.reshape(1,-1)
+    y=y.reshape(1,-1)
+    xy = np.vstack([x,y])
+    z = gaussian_kde(xy)(xy)
+    #plot
+    plt.rc('font',family='Times New Roman') 
+    fig, ax = plt.subplots()
+    plt.scatter(y, x,c=z,  s=0.5,cmap='rainbow')
+    plt.colorbar(label='Point Density')
+    plt.title("imputation_test")
+    plt.xlabel('test') 
+    plt.ylabel('pred')  
+    plt.xlim(0,1)
+    plt.ylim(0,1)
+    xpoints = np.array([0, 1])
+    ypoints = np.array([0, 1])
+    plt.plot(xpoints, ypoints,linewidth=1,linestyle="--",c="black")
+    plt.savefig("log/imputation_test.png", format="png")
+    plt.show()
 
 
     #cold-start test
@@ -106,6 +129,7 @@ if __name__ == '__main__':
 
         #generate the fig
         # Calculate the point density
+        print("-----------------------------generating figure----------------------------")
         x=np.array(df_pre_test)
         y=np.array(df_y_test)
         x=x.reshape(1,-1)

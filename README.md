@@ -1,7 +1,7 @@
 # DeepFM for MOFs (DeepFM4MOF)
 ![](Abstract.png)
 ---
-This package provides implementation of DeepFM for prediction of gas adsorption properties of MOFs.
+This code provides implementation of DeepFM for prediction of gas adsorption properties of MOFs, and the results of the paper ([DeepFM4MOF](https://www.sciencedirect.com/science/article/abs/pii/S1383586622016665)) can be reproduced using this code.
 
 ```shell
 ├── utils.py   
